@@ -1,0 +1,114 @@
+body {
+  width: fit-content;
+  height: fit-content;
+  border-color: black;
+  display: flex;
+  flex-direction: column;
+  background-color: azure;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+table#simTbl {
+  background-color: white;
+  text-align: center;
+  font-family: "Merriweather", "Cambria Math", Cambria, "Times New Roman";
+  font-weight: bold;
+}
+
+table#simTbl,
+table#simTbl tbody,
+tr,
+th,
+td {
+  box-sizing: border-box;
+  padding: 0%;
+  margin: 0%;
+  border-spacing: unset;
+  border-width: 1.5px;
+}
+
+table#simTbl th,
+td {
+  width: 64px;
+  height: 32px;
+}
+
+table#simTbl th {
+  width: 64px;
+  height: 32px;
+}
+
+table#simTbl th,
+td {
+  border-style: solid;
+}
+
+table#simTbl th:first-child {
+  /*Canto Base*/
+  background-color: #000000;
+  color: white;
+  border-color: white;
+  border-style: ridge;
+}
+
+table#simTbl th:not(:first-child) {
+  /*Header (sem canto Base)*/
+  background-color: darkgray;
+  border-color: white;
+  border-style: ridge;
+}
+
+table#simTbl tr:not(:first-child):not(:last-child) td:first-child {
+  /*header lateral restrcoes*/
+  background-color: darkgray;
+  border-color: white;
+  border-style: ridge;
+}
+
+table#simTbl tr:not(:first-child):not(:last-child) td:last-child {
+  /*Peso coficentes*/
+  background-color: darkgray;
+}
+
+table#simTbl tr:last-child td:first-child {
+  /*Canto Objetiva*/
+  background-color: #7a7a7a;
+  border-color: white;
+  color: white;
+  border-style: ridge;
+}
+
+table#simTbl tr:last-child td:not(:first-child) {
+  /*Coeficientes Objetiva*/
+  background-color: darkgray;
+}
+
+.sub {
+  font-size: 90%;
+  position: relative;
+  bottom: -0.25em;
+}
+
+.inputWrppr {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0%;
+  margin: 1.5%;
+  width: 265px;
+}
+
+.buttonWrppr {
+  /* background-color:red; */
+  margin: 10% 0% 10% 0%;
+  padding: 0%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 265px;
+}
