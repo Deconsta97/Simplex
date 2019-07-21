@@ -1,4 +1,3 @@
-//global
 var i = 0;
 var j = 0;
 var columns;
@@ -11,35 +10,23 @@ const updtTblBtn = document.querySelector("#updtTblBtn");
 const clrTblBtn = document.querySelector("#clrTblBtn");
 const Table = document.querySelector("#Table");
 
-//console.log(varInput, resInput);
 window.addEventListener("load", updateValues);
 varInput.addEventListener("change", updateValues);
 resInput.addEventListener("change", updateValues);
 updtTblBtn.addEventListener("click", createTable);
 clrTblBtn.addEventListener("click", clearTable);
 
-
-
-  function insertText(parentObject, contentString, classArray){
-
-  const textElement = document.createElement('text');
+function insertText(parentObject, contentString, classArray) {
+  const textElement = document.createElement("text");
 
   textElement.innerText = contentString;
-  if(classArray.length != 0){
-    for ( let classElmnt of classArray) {
+  if (classArray.length != 0) {
+    for (let classElmnt of classArray) {
       textElement.classList.add(classElmnt);
     }
   }
   parentObject.appendChild(textElement);
 }
-
-/*
-function insertText(parentObject, string){
-  const textElement = document.createElement('text');
-  textElement.innerText = string;
-  parentObject.appendChild(textElement);
-}
-*/
 
 function updateValues() {
   numVar = varInput.value;
@@ -76,23 +63,17 @@ function createTable() {
 
       if (ci == 0) {
         if (cj == ci) elmnt.innerText = "Base";
-        else if (cj <= numVar){
-          insertText(elmnt, 'X',[]);
-          insertText(elmnt, cj,['sub']);
-        }
-        else if (cj <= numVar + numRes){
+        else if (cj <= numVar) {
+          insertText(elmnt, "X", []);
+          insertText(elmnt, cj, ["sub"]);
+        } else if (cj <= numVar + numRes) {
           //elmnt.innerText = "F" + (cj - numVar);
-          insertText(elmnt, 'F',[]);
-          insertText(elmnt, (cj-numVar), ['sub']);
-
-
-        } 
-        else if (cj == numVar + numRes + 1) elmnt.innerText = "Z";
+          insertText(elmnt, "F", []);
+          insertText(elmnt, cj - numVar, ["sub"]);
+        } else if (cj == numVar + numRes + 1) elmnt.innerText = "Z";
         else elmnt.innerText = "=";
-        
-      }
-      else if (cj == 0) {
-        if(ci > numRes ) elmnt.innerText = "Obj";
+      } else if (cj == 0) {
+        if (ci > numRes) elmnt.innerText = "Obj";
         else elmnt.innerText = "F" + ci;
       }
     }
@@ -102,5 +83,5 @@ function createTable() {
   newTblElement.id = "simTbl";
   Table.appendChild(newTblElement);
 
-  // 
+  //
 }
