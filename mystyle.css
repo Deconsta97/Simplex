@@ -1,13 +1,17 @@
 body {
-  width: fit-content;
-  height: fit-content;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
   border-color: black;
   display: flex;
   flex-direction: column;
   background-color: azure;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   margin: auto;
+}
+
+.gradient {
+  background-image: linear-gradient(to right, #da00ff, #07fff4);
 }
 
 table#simTbl {
@@ -15,6 +19,7 @@ table#simTbl {
   text-align: center;
   font-family: "Merriweather", "Cambria Math", Cambria, "Times New Roman";
   font-weight: bold;
+  border-radius: 10px;
 }
 
 table#simTbl,
@@ -51,6 +56,7 @@ table#simTbl th:first-child {
   color: white;
   border-color: white;
   border-style: ridge;
+  border-top-left-radius: 10px;
 }
 
 table#simTbl th:not(:first-child) {
@@ -65,6 +71,11 @@ table#simTbl tr:not(:first-child):not(:last-child) td:first-child {
   background-color: darkgray;
   border-color: white;
   border-style: ridge;
+}
+
+table#simTbl th:last-child {
+  /*Header (sem canto Base)*/
+  border-top-right-radius: 10px;
 }
 
 table#simTbl tr:not(:first-child):not(:last-child) td:last-child {
@@ -104,11 +115,49 @@ table#simTbl tr:last-child td:not(:first-child) {
 
 .buttonWrppr {
   /* background-color:red; */
-  margin: 10% 0% 10% 0%;
+  margin: 1% 0% 1% 0%;
   padding: 0%;
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 265px;
+  justify-content: space-around;
+  width: fit-content;
+}
+
+/*
+#resSlct, #objFnctn{
+ display: none; 
+}
+*/
+
+#objFnctn text, input{
+  white-space: nowrap;
+  box-sizing: border-box;
+ }
+
+.fnctnWrppr {
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0%;
+  margin: 1.5%;
+}
+
+div#objFnctn input {
+   width: 32px;
+   margin-left: 5%;
+   /*margin-right: 5%;*/
+   text-align: end;
+}
+
+
+
+#prvStpBtn, #nxtStpBtn {
+    width: 100px;
+    margin-left: 1%;
+    margin-right: 1%;
+    white-space: nowrap;
+    box-sizing: border-box;
 }

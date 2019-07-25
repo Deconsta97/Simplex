@@ -1,47 +1,55 @@
-//global
-var i = 0;
-var j = 0;
 var columns;
 var rows;
 var numVar = 1;
 var numRes = 1;
-const varInput = document.querySelector("#varInput");
-const resInput = document.querySelector("#resInput");
-const updtTblBtn = document.querySelector("#updtTblBtn");
-const clrTblBtn = document.querySelector("#clrTblBtn");
-const Table = document.querySelector("#Table");
-
-//console.log(varInput, resInput);
-window.addEventListener("load", updateValues);
-varInput.addEventListener("change", updateValues);
-resInput.addEventListener("change", updateValues);
-updtTblBtn.addEventListener("click", createTable);
-clrTblBtn.addEventListener("click", clearTable);
-
+var stepIndex = 1;
+const varSlct = document.querySelector('#varSlct');
+const varInput = document.querySelector('#varInput');
+const resSlct = document.querySelector('#resSlct');
+const resInput = document.querySelector('#resInput');
+const updtTblBtn = document.querySelector('#updtTblBtn');
+const clrTblBtn = document.querySelector('#clrTblBtn');
+const nxtStpBtn = document.querySelector('#nxtStpBtn');
+const prvStpBtn = document.querySelector('#prvStpBtn');
+const Table = document.querySelector('#Table');
+const objFnctn = document.querySelector('#objFnctn');
 
 
-  function insertText(parentObject, contentString, classArray){
+window.addEventListener('load', updateValues);
+window.addEventListener('load', updateObjFnctn);
+varInput.addEventListener('change', updateValues);
+varInput.addEventListener('change', updateObjFnctn);
+resInput.addEventListener('change', updateValues);
+updtTblBtn.addEventListener('click', createTable);
+clrTblBtn.addEventListener('click', clearTable);
+prvStpBtn.addEventListener('click', previousStep);
+nxtStpBtn.addEventListener('click', nextStep);
 
+function insertText(parentObject, contentString, classArray){
   const textElement = document.createElement('text');
 
   textElement.innerText = contentString;
-  if(classArray.length != 0){
-    for ( let classElmnt of classArray) {
+  if (classArray.length != 0) {
+    for (let classElmnt of classArray) {
       textElement.classList.add(classElmnt);
     }
   }
   parentObject.appendChild(textElement);
 }
 
-/*
-function insertText(parentObject, string){
-  const textElement = document.createElement('text');
-  textElement.innerText = string;
-  parentObject.appendChild(textElement);
-}
-*/
+function insertElement(parentObject, elementKind, contentString, classArray){
+  const newElement = document.createElement(elementKind);
 
-function updateValues() {
+  newElement.innerHTML = contentString;
+  if (classArray.length != 0) {
+    for (let classElmnt of classArray) {
+      newElement.classList.add(classElmnt);
+    }
+  }
+  parentObject.appendChild(newElement);
+}
+
+function updateValues(){
   numVar = varInput.value;
   numRes = resInput.value;
 
@@ -51,11 +59,11 @@ function updateValues() {
   rows = 2 + numRes;
 }
 
-function clearTable() {
+function clearTable(){
   Table.innerHTML = null;
 }
 
-function createTable() {
+function createTable(){
   Table.innerHTML = null;
   let ci;
   let cj;
@@ -76,31 +84,68 @@ function createTable() {
 
       if (ci == 0) {
         if (cj == ci) elmnt.innerText = "Base";
-        else if (cj <= numVar){
-          insertText(elmnt, 'X',[]);
-          insertText(elmnt, cj,['sub']);
-        }
-        else if (cj <= numVar + numRes){
-          //elmnt.innerText = "F" + (cj - numVar);
-          insertText(elmnt, 'F',[]);
-          insertText(elmnt, (cj-numVar), ['sub']);
-
-
-        } 
-        else if (cj == numVar + numRes + 1) elmnt.innerText = "Z";
+        else if (cj <= numVar) {
+          insertText(elmnt, "X", []);
+          insertText(elmnt, cj, ["sub"]);
+        } else if (cj <= numVar + numRes) {
+          insertText(elmnt, "F", []);
+          insertText(elmnt, cj - numVar, ["sub"]);
+        } else if (cj == numVar + numRes + 1) elmnt.innerText = "Z";
         else elmnt.innerText = "=";
-        
-      }
-      else if (cj == 0) {
-        if(ci > numRes ) elmnt.innerText = "Obj";
-        else elmnt.innerText = "F" + ci;
+      } else if (cj == 0) {
+        if (ci > numRes) elmnt.innerText = "Obj";
+        else {
+          insertText(elmnt, "F", []);
+          insertText(elmnt, ci, ["sub"]);
+        }
       }
     }
   }
-
   newTblElement.appendChild(newTblBody);
   newTblElement.id = "simTbl";
   Table.appendChild(newTblElement);
+}
 
-  // 
+function nextStep(){
+  stepIndex++;
+  if (stepIndex > 1) prvStpBtn.disabled = false;
+  switch (stepIndex) {
+    case 2: //Definindo modelo da função
+    togleElement(varSlct);
+    togleElement(objFnctn);
+    break;
+    default:
+      alert("[...]And I'm Iron Man");
+  }
+}
+
+function previousStep(){
+  stepIndex--;
+  if (stepIndex == 1) prvStpBtn.disabled = true;
+  switch (stepIndex) {
+    case 1: //Definindo numero de variáveis
+    togleElement(objFnctn);
+    togleElement(varSlct);
+    break;
+    default:
+      alert("[...]And I'm Iron Man.");
+  }
+}
+
+function togleElement(elmnt){
+  if (elmnt.style.display != "none") elmnt.style.display = "none";
+  else elmnt.style.display = "";
+}
+
+function updateObjFnctn(){
+  objFnctn.innerHTML='';
+  insertText(objFnctn,'Maximizar Z',[]);
+  for (let c=0;c<numVar;c++) {
+    let inputElmnt = document.createElement('input');
+    objFnctn.appendChild(inputElmnt);
+    insertText(objFnctn,'X',[]);
+    insertText(objFnctn,c+1,['sub']);    
+    insertElement(objFnctn,'span','&nbsp&nbsp',[]);
+    if(c!= numVar-1) insertText(objFnctn,'+',[]);
+  }
 }

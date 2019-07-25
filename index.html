@@ -5,36 +5,38 @@
     <script defer="" src="myscripts.js"></script>
   </head>
 
-  <body>
+  <body class="gradient">
     <h2>Simplex Alpha 0</h2>
 
-    <div class='inputWrppr'>
-    <text>Informe o número de variáveis</text>
-    <select id="varInput" value="1">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-    </select>
-  </div>
-
-  <div class='inputWrppr'>
-    <text>Informe o número de restrições</text>
-    <select id="resInput" value="1">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-    </select>
-  </div>
-  <div class='buttonWrppr'>
-    <button hidden="">Next Step</button>
-    <button id="updtTblBtn">Update Table</button>
-    <button id="clrTblBtn">Clear Table</button>
-  </div>
-    <div id="Table">
+    <div id="varSlct" class="inputWrppr">
+      <text>Informe o número de variáveis</text>
+      <select id="varInput" value="1">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
     </div>
+
+    <div id="objFnctn" class="fnctnWrppr" style="display: none"></div>
+
+    <div id="resSlct" class="inputWrppr" style="display: none">
+      <text>Informe o número de restrições</text>
+      <select id="resInput" value="1">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </div>
+    <div class="buttonWrppr">
+      <button id="prvStpBtn" disabled>Previous Step</button>
+      <button id="nxtStpBtn">Next Step</button>
+      <button id="updtTblBtn" hidden>Update Table</button>
+      <button id="clrTblBtn" hidden>Clear Table</button>
+    </div>
+    <div id="Table"></div>
   </body>
 </html>
