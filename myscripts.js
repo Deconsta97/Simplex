@@ -1,8 +1,8 @@
-var columns;
-var rows;
-var numVar = 1;
-var numRes = 1;
-var stepIndex = 1;
+let columns;
+let rows;
+let numVar = 1;
+let numRes = 1;
+let stepIndex = 1;
 const varSlct = document.querySelector('#varSlct');
 const varInput = document.querySelector('#varInput');
 const resSlct = document.querySelector('#resSlct');
