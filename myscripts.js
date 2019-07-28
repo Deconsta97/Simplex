@@ -13,13 +13,14 @@ const nxtStpBtn = document.querySelector('#nxtStpBtn');
 const prvStpBtn = document.querySelector('#prvStpBtn');
 const Table = document.querySelector('#Table');
 const objFnctn = document.querySelector('#objFnctn');
-
+const resTable = document.querySelector('#resTable');
 
 window.addEventListener('load', updateValues);
 window.addEventListener('load', updateObjFnctn);
 varInput.addEventListener('change', updateValues);
 varInput.addEventListener('change', updateObjFnctn);
 resInput.addEventListener('change', updateValues);
+resInput.addEventListener('change', updateResTable);
 updtTblBtn.addEventListener('click', createTable);
 clrTblBtn.addEventListener('click', clearTable);
 prvStpBtn.addEventListener('click', previousStep);
@@ -81,7 +82,6 @@ function createTable(){
         newTblBody.children[ci].appendChild(document.createElement("td"));
       }
       let elmnt = newTblBody.children[ci].children[cj];
-
       if (ci == 0) {
         if (cj == ci) elmnt.innerText = "Base";
         else if (cj <= numVar) {
@@ -109,43 +109,81 @@ function createTable(){
 function nextStep(){
   stepIndex++;
   if (stepIndex > 1) prvStpBtn.disabled = false;
+  if (stepIndex >= 4) nxtStpBtn.disabled = true;
   switch (stepIndex) {
     case 2: //Definindo modelo da função
-    togleElement(varSlct);
-    togleElement(objFnctn);
-    break;
+      toggleElement(varSlct);
+      toggleElement(objFnctn);
+      break;
+    case 3://Definindo numero de restricoes
+      toggleElement(objFnctn);
+      toggleElement(resSlct);
+      break;
+    case 4://Definindo numero de restricoes
+      toggleElement(resSlct);
+      toggleElement(resTable);      
+      break;
     default:
       alert("[...]And I'm Iron Man");
   }
 }
 
 function previousStep(){
+  
   stepIndex--;
   if (stepIndex == 1) prvStpBtn.disabled = true;
+  if (stepIndex < 4) nxtStpBtn.disabled = false;
   switch (stepIndex) {
     case 1: //Definindo numero de variáveis
-    togleElement(objFnctn);
-    togleElement(varSlct);
+      toggleElement(objFnctn);
+      toggleElement(varSlct);
+      break;
+    case 2: //Definindo modelo da função
+      toggleElement(resSlct);
+      toggleElement(objFnctn);
+      break;
+    case 3: //Definindo modelo da função
+      toggleElement(resTable);
+      toggleElement(resSlct);
     break;
     default:
       alert("[...]And I'm Iron Man.");
   }
 }
 
-function togleElement(elmnt){
-  if (elmnt.style.display != "none") elmnt.style.display = "none";
-  else elmnt.style.display = "";
+function toggleElement(elmnt){
+  elmnt.classList.toggle('hide');
 }
 
 function updateObjFnctn(){
-  objFnctn.innerHTML='';
+  objFnctn.innerHTML= null;
   insertText(objFnctn,'Maximizar Z',[]);
   for (let c=0;c<numVar;c++) {
-    let inputElmnt = document.createElement('input');
-    objFnctn.appendChild(inputElmnt);
+    insertElement(objFnctn,'input','',['defMrgnL']);
     insertText(objFnctn,'X',[]);
     insertText(objFnctn,c+1,['sub']);    
-    insertElement(objFnctn,'span','&nbsp&nbsp',[]);
-    if(c!= numVar-1) insertText(objFnctn,'+',[]);
+    if(c!= numVar-1) insertText(objFnctn,'+',['defMrgnL']);
+  }
+}
+
+function updateResTable(){
+  
+  let newDiv;
+  resTable.innerHTML= null;
+  for (let d=0;d<numRes;d++) {
+    
+    newDiv = document.createElement('div');
+    newDiv.id = 'resRow' + (d+1);
+    newDiv.classList.add('fnctnWrppr')
+    insertText(newDiv,'Restricao '+(d+1)+':',[]);
+    for (let c=0;c<numVar;c++) {
+      insertElement(newDiv,'input','',['defMrgnL']);
+      insertText(newDiv,'X',[]);
+      insertText(newDiv,c+1,['sub']);    
+      if(c!= numVar-1) insertText(newDiv,'+',['defMrgnL']);
+    }
+    insertText(newDiv,'≤',['defMrgnL']);
+    insertElement(newDiv,'input','',['defMrgnL']);
+    resTable.appendChild(newDiv);
   }
 }

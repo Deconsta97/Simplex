@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="./mystyle.css" />
-    <script defer="" src="myscripts.js"></script>
+    <link rel='stylesheet' type='text/css' href='./mystyle.css' />
+    <script defer='' src='myscripts.js'></script>
   </head>
-
-  <body class="gradient">
+  <body class='gradient'>
     <h2>Simplex Alpha 0</h2>
-
-    <div id="varSlct" class="inputWrppr">
+    <div id='varSlct' class='inputWrppr'>
       <text>Informe o número de variáveis</text>
-      <select id="varInput" value="1">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
+      <select id='varInput' value='1'>
+        <option value='1'>1</option>
+        <option value='2'>2</option>
+        <option value='3'>3</option>
+        <option value='4'>4</option>
+        <option value='5'>5</option>
       </select>
     </div>
-
-    <div id="objFnctn" class="fnctnWrppr" style="display: none"></div>
-
-    <div id="resSlct" class="inputWrppr" style="display: none">
+    <div id='objFnctn' class='hide fnctnWrppr'></div>
+    <div id='resSlct' class='hide inputWrppr'>
       <text>Informe o número de restrições</text>
-      <select id="resInput" value="1">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
+      <select id='resInput' value='1'>
+        <option value='1'>1</option>
+        <option value='2'>2</option>
+        <option value='3'>3</option>
+        <option value='4'>4</option>
+        <option value='5'>5</option>
       </select>
     </div>
-    <div class="buttonWrppr">
-      <button id="prvStpBtn" disabled>Previous Step</button>
-      <button id="nxtStpBtn">Next Step</button>
-      <button id="updtTblBtn" hidden>Update Table</button>
-      <button id="clrTblBtn" hidden>Clear Table</button>
+    <div id='resTable' class='hide resTableWrppr'></div>
+    <div class='buttonWrppr'>
+      <button id='prvStpBtn' disabled>Previous Step</button>
+      <button id='nxtStpBtn'>Next Step</button>
+      <button id='updtTblBtn' hidden>Update Table</button>
+      <button id='clrTblBtn' hidden>Clear Table</button>
     </div>
-    <div id="Table"></div>
+    <div id='Table'></div>
   </body>
 </html>
