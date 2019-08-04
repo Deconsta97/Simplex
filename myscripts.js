@@ -14,9 +14,11 @@ const prvStpBtn = document.querySelector('#prvStpBtn');
 const Table = document.querySelector('#Table');
 const objFnctn = document.querySelector('#objFnctn');
 const resTable = document.querySelector('#resTable');
+const mdlOvrvw = document.querySelector('#mdlOvrvw')
 
 window.addEventListener('load', updateValues);
 window.addEventListener('load', updateObjFnctn);
+window.addEventListener('load', updateResTable);
 varInput.addEventListener('change', updateValues);
 varInput.addEventListener('change', updateObjFnctn);
 resInput.addEventListener('change', updateValues);
@@ -123,6 +125,10 @@ function nextStep(){
       toggleElement(resSlct);
       toggleElement(resTable);      
       break;
+    case 5: //Visualizando o Modelo
+      toggleElement(resTable);
+      toggleElement(resSlct);
+    break;
     default:
       alert("[...]And I'm Iron Man");
   }
@@ -132,7 +138,7 @@ function previousStep(){
   
   stepIndex--;
   if (stepIndex == 1) prvStpBtn.disabled = true;
-  if (stepIndex < 4) nxtStpBtn.disabled = false;
+  if (stepIndex < 5) nxtStpBtn.disabled = false;
   switch (stepIndex) {
     case 1: //Definindo numero de variáveis
       toggleElement(objFnctn);
@@ -146,6 +152,11 @@ function previousStep(){
       toggleElement(resTable);
       toggleElement(resSlct);
     break;
+    case 3: //Visualizando o Modelo
+      toggleElement(resTable);
+      toggleElement(resSlct);
+    break;
+
     default:
       alert("[...]And I'm Iron Man.");
   }
@@ -167,12 +178,9 @@ function updateObjFnctn(){
 }
 
 function updateResTable(){
-  
-  let newDiv;
   resTable.innerHTML= null;
   for (let d=0;d<numRes;d++) {
-    
-    newDiv = document.createElement('div');
+    const newDiv = document.createElement('div');
     newDiv.id = 'resRow' + (d+1);
     newDiv.classList.add('fnctnWrppr')
     insertText(newDiv,'Restricao '+(d+1)+':',[]);
