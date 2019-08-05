@@ -124,8 +124,6 @@ table#simTbl tr:last-child td:not(:first-child) {
   width: fit-content;
 }
 
-
-
 .fnctnWrppr {
   width: fit-content;
   height: fit-content;
@@ -136,15 +134,28 @@ table#simTbl tr:last-child td:not(:first-child) {
   margin: 15px;
 }
 
+.mdlOvrvwWrppr {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  justify-content: flex-start;
+  margin: 15px;
+  padding: 0%;
+  width: fit-content;
+}
+
 #objFnctn text,
 #objFnctn input,
 [id*="resRow"] text,
-[id*="resRow"] input {
+[id*="resRow"] input,
+#mdlOvrvw text,
+#mdlOvrvw input {
   white-space: nowrap;
   box-sizing: border-box;
 }
 
-#objFnctn input, [id*="resRow"]  input {
+#objFnctn input, [id*="resRow"] input, #mdlOvrvw input {
   width: 32px;
   text-align: end;
 }
@@ -164,6 +175,15 @@ table#simTbl tr:last-child td:not(:first-child) {
 
 .defMrgnR {
   margin-right: 15px;
+}
+
+
+.red{
+  color: rgb(145, 12, 12);
+}
+
+.it{
+  font-style: italic;
 }
 
 .hide{

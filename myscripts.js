@@ -14,15 +14,21 @@ const prvStpBtn = document.querySelector('#prvStpBtn');
 const Table = document.querySelector('#Table');
 const objFnctn = document.querySelector('#objFnctn');
 const resTable = document.querySelector('#resTable');
-const mdlOvrvw = document.querySelector('#mdlOvrvw')
+const mdlOvrvw = document.querySelector('#mdlOvrvw');
+const mdlFnctn = document.querySelector('#mdlFnctn');
+const mdlResTable = document.querySelector('#mdlResTable');
+
 
 window.addEventListener('load', updateValues);
 window.addEventListener('load', updateObjFnctn);
 window.addEventListener('load', updateResTable);
+//window.addEventListener('load', updateModel);
 varInput.addEventListener('change', updateValues);
 varInput.addEventListener('change', updateObjFnctn);
+//varInput.addEventListener('change', updateModel);
 resInput.addEventListener('change', updateValues);
 resInput.addEventListener('change', updateResTable);
+//resInput.addEventListener('change', updateModel);
 updtTblBtn.addEventListener('click', createTable);
 clrTblBtn.addEventListener('click', clearTable);
 prvStpBtn.addEventListener('click', previousStep);
@@ -55,7 +61,6 @@ function insertElement(parentObject, elementKind, contentString, classArray){
 function updateValues(){
   numVar = varInput.value;
   numRes = resInput.value;
-
   numVar = parseInt(numVar);
   numRes = parseInt(numRes);
   columns = 3 + numVar + numRes;
@@ -108,10 +113,10 @@ function createTable(){
   Table.appendChild(newTblElement);
 }
 
-function nextStep(){
+function nextStep(){   
   stepIndex++;
   if (stepIndex > 1) prvStpBtn.disabled = false;
-  if (stepIndex >= 4) nxtStpBtn.disabled = true;
+  if (stepIndex >= 5) nxtStpBtn.disabled = true;
   switch (stepIndex) {
     case 2: //Definindo modelo da função
       toggleElement(varSlct);
@@ -126,16 +131,16 @@ function nextStep(){
       toggleElement(resTable);      
       break;
     case 5: //Visualizando o Modelo
+      updateModel();
       toggleElement(resTable);
-      toggleElement(resSlct);
+      toggleElement(mdlOvrvw);
     break;
     default:
       alert("[...]And I'm Iron Man");
   }
 }
 
-function previousStep(){
-  
+function previousStep(){  
   stepIndex--;
   if (stepIndex == 1) prvStpBtn.disabled = true;
   if (stepIndex < 5) nxtStpBtn.disabled = false;
@@ -152,11 +157,10 @@ function previousStep(){
       toggleElement(resTable);
       toggleElement(resSlct);
     break;
-    case 3: //Visualizando o Modelo
+    case 4: //Visualizando o Modelo
+      toggleElement(mdlOvrvw);
       toggleElement(resTable);
-      toggleElement(resSlct);
     break;
-
     default:
       alert("[...]And I'm Iron Man.");
   }
@@ -195,3 +199,53 @@ function updateResTable(){
     resTable.appendChild(newDiv);
   }
 }
+
+function getInputsValue(parentNode) { 
+  debugger
+  let inputValues = [];
+  for (let HTMLElmnt of parentNode.querySelectorAll('input')){
+    if(HTMLElmnt.value == '') HTMLElmnt.value = 0;
+    inputValues.push(parseInt(HTMLElmnt.value));
+  }
+  return inputValues;
+}
+
+function updateModel(){   
+ 
+  //FUNCAO OBJETIVO
+  mdlFnctn.innerHTML = null;
+  let varCffcnts = getInputsValue(objFnctn);
+  insertText(mdlFnctn,'Maximizar Z =',[]);
+  for (let c=0;c<numVar;c++) {
+    insertElement(mdlFnctn,'text',varCffcnts[c],['defMrgnL','red','it']);
+    insertText(mdlFnctn,'X',[]);
+    insertText(mdlFnctn,c+1,['sub']);    
+    if(c!= numVar-1) insertText(mdlFnctn,'+',['defMrgnL']);
+  }
+  //Restricoes OBJETIVO
+  mdlResTable.innerHTML = null;
+  let resCffcnts = getInputsValue(resTable);
+  insertElement(mdlResTable,'div',null,['resTableWrppr']);
+  insertText(mdlResTable,'Sujeito a:',['fnctnWrppr']);
+  let cursor = 0;
+  for (let d=0;d<numRes;d++) {
+    const newDiv = document.createElement('div');
+    newDiv.id = 'resRow' + (d+1);
+    newDiv.classList.add('fnctnWrppr')
+    //insertText(newDiv,'Restricao '+(d+1)+':',[]);
+    for (let c=0;c<numVar;c++) {
+      insertElement(newDiv,'text',resCffcnts[cursor++],['defMrgnL','red','it']);
+      //resCffcnts.shift();
+      //insertElement(newDiv,'input','',['defMrgnL']);
+      insertText(newDiv,'X',[]);
+      insertText(newDiv,c+1,['sub']);    
+      if(c!= numVar-1) insertText(newDiv,'+',['defMrgnL']);
+    }
+    insertText(newDiv,'≤',['defMrgnL']);
+    //insertElement(newDiv,'input','',['defMrgnL']);
+    insertElement(newDiv,'text',resCffcnts[cursor++],['defMrgnL','red','it']);
+    //resCffcnts.shift();
+    mdlResTable.appendChild(newDiv);
+  }
+}
+
