@@ -3,36 +3,43 @@ let rows;
 let numVar = 1;
 let numRes = 1;
 let stepIndex = 1;
-const varSlct = document.querySelector('#varSlct');
-const varInput = document.querySelector('#varInput');
-const resSlct = document.querySelector('#resSlct');
-const resInput = document.querySelector('#resInput');
-const updtTblBtn = document.querySelector('#updtTblBtn');
-const clrTblBtn = document.querySelector('#clrTblBtn');
-const nxtStpBtn = document.querySelector('#nxtStpBtn');
-const prvStpBtn = document.querySelector('#prvStpBtn');
-const Table = document.querySelector('#Table');
-const objFnctn = document.querySelector('#objFnctn');
-const resTable = document.querySelector('#resTable');
-const mdlOvrvw = document.querySelector('#mdlOvrvw');
-const mdlFnctn = document.querySelector('#mdlFnctn');
-const mdlResTable = document.querySelector('#mdlResTable');
 
+const $ = document.querySelector.bind(document);
+const varSlct = $('#varSlct');
+const varInput = $('#varInput');
+const resSlct = $('#resSlct');
+const resInput = $('#resInput');
+const updtTblBtn = $('#updtTblBtn');
+const clrTblBtn = $('#clrTblBtn');
+const nxtStpBtn = $('#nxtStpBtn');
+const prvStpBtn = $('#prvStpBtn');
+const nxtInnrStpBtn = $('#nxtInnrStpBtn');
+const prvInnrStpBtn = $('#prvInnrStpBtn');
+const Table = $('#Table');
+const objFnctn = $('#objFnctn');
+const resTable = $('#resTable');
+const mdlOvrvw = $('#mdlOvrvw');
+const mdlFnctn = $('#mdlFnctn');
+const mdlResTable = $('#mdlResTable');
+const fVarIns = $('#fVarIns');
 
-window.addEventListener('load', updateValues);
-window.addEventListener('load', updateObjFnctn);
-window.addEventListener('load', updateResTable);
-//window.addEventListener('load', updateModel);
-varInput.addEventListener('change', updateValues);
-varInput.addEventListener('change', updateObjFnctn);
-//varInput.addEventListener('change', updateModel);
-resInput.addEventListener('change', updateValues);
-resInput.addEventListener('change', updateResTable);
-//resInput.addEventListener('change', updateModel);
 updtTblBtn.addEventListener('click', createTable);
 clrTblBtn.addEventListener('click', clearTable);
 prvStpBtn.addEventListener('click', previousStep);
 nxtStpBtn.addEventListener('click', nextStep);
+
+function createCustomElement(elementKind, elementid, contentString, classArray){
+  const elmnt = document.createElement(elementKind);
+  if (elementid != '') elmnt.id = elementid;
+  if (contentString != '') elmnt.innerText = contentString;
+  if(classArray != ''){
+    for (let classElmnt of classArray) {
+      elmnt.classList.add(classElmnt);
+    }
+  }
+  return elmnt;
+}
+
 
 function insertText(parentObject, contentString, classArray){
   const textElement = document.createElement('text');
@@ -80,7 +87,6 @@ function createTable(){
 
   for (ci = 0; ci < rows; ci++)
     newTblBody.appendChild(document.createElement("tr"));
-
   for (ci = 0; ci < rows; ci++) {
     for (cj = 0; cj < columns; cj++) {
       if (ci == 0) {
@@ -113,28 +119,46 @@ function createTable(){
   Table.appendChild(newTblElement);
 }
 
-function nextStep(){   
+function nextStep() {
   stepIndex++;
   if (stepIndex > 1) prvStpBtn.disabled = false;
-  if (stepIndex >= 5) nxtStpBtn.disabled = true;
+  if (stepIndex >= 6) nxtStpBtn.disabled = true;
   switch (stepIndex) {
     case 2: //Definindo modelo da função
+      updateValues();
+      updateObjFnctn();
       toggleElement(varSlct);
       toggleElement(objFnctn);
       break;
-    case 3://Definindo numero de restricoes
+    case 3: //Definindo numero de restricoes
       toggleElement(objFnctn);
       toggleElement(resSlct);
       break;
-    case 4://Definindo numero de restricoes
+    case 4: //Definindo coeficientes e termos das restricoes
+      updateValues();
+      updateResTable();
       toggleElement(resSlct);
-      toggleElement(resTable);      
+      toggleElement(resTable);
       break;
     case 5: //Visualizando o Modelo
+      nxtStpBtn.innerText = "Próximo Capítulo";
       updateModel();
       toggleElement(resTable);
       toggleElement(mdlOvrvw);
-    break;
+      break;
+    case 6: //Variaveis de folga
+      toggleElement(mdlOvrvw);
+      toggleElement(nxtStpBtn);
+      toggleElement(prvStpBtn);
+      toggleElement(fVarIns);
+      toggleElement(nxtInnrStpBtn);
+      toggleElement(prvInnrStpBtn);  
+      insertEquations();
+      showEquations(1);
+      let r=1;
+      nxtInnrStpBtn.addEventListener('click', ()=>{nextRes(++r)});
+      prvInnrStpBtn.addEventListener('click', ()=>{nextRes(--r)});
+      break;
     default:
       alert("[...]And I'm Iron Man");
   }
@@ -201,7 +225,6 @@ function updateResTable(){
 }
 
 function getInputsValue(parentNode) { 
-  debugger
   let inputValues = [];
   for (let HTMLElmnt of parentNode.querySelectorAll('input')){
     if(HTMLElmnt.value == '') HTMLElmnt.value = 0;
@@ -211,13 +234,12 @@ function getInputsValue(parentNode) {
 }
 
 function updateModel(){   
- 
   //FUNCAO OBJETIVO
   mdlFnctn.innerHTML = null;
   let varCffcnts = getInputsValue(objFnctn);
   insertText(mdlFnctn,'Maximizar Z =',[]);
   for (let c=0;c<numVar;c++) {
-    insertElement(mdlFnctn,'text',varCffcnts[c],['defMrgnL','red','it']);
+    insertElement(mdlFnctn,'text',varCffcnts[c],['defMrgnL','red','coefMrgnR']);
     insertText(mdlFnctn,'X',[]);
     insertText(mdlFnctn,c+1,['sub']);    
     if(c!= numVar-1) insertText(mdlFnctn,'+',['defMrgnL']);
@@ -225,27 +247,65 @@ function updateModel(){
   //Restricoes OBJETIVO
   mdlResTable.innerHTML = null;
   let resCffcnts = getInputsValue(resTable);
-  insertElement(mdlResTable,'div',null,['resTableWrppr']);
+  //insertElement(mdlResTable,'div',null,['resTableWrppr']);
   insertText(mdlResTable,'Sujeito a:',['fnctnWrppr']);
   let cursor = 0;
   for (let d=0;d<numRes;d++) {
     const newDiv = document.createElement('div');
     newDiv.id = 'resRow' + (d+1);
     newDiv.classList.add('fnctnWrppr')
-    //insertText(newDiv,'Restricao '+(d+1)+':',[]);
     for (let c=0;c<numVar;c++) {
-      insertElement(newDiv,'text',resCffcnts[cursor++],['defMrgnL','red','it']);
-      //resCffcnts.shift();
-      //insertElement(newDiv,'input','',['defMrgnL']);
+      insertElement(newDiv,'text',resCffcnts[cursor++],['defMrgnL','red','coefMrgnR']);
       insertText(newDiv,'X',[]);
       insertText(newDiv,c+1,['sub']);    
       if(c!= numVar-1) insertText(newDiv,'+',['defMrgnL']);
     }
-    insertText(newDiv,'≤',['defMrgnL']);
-    //insertElement(newDiv,'input','',['defMrgnL']);
-    insertElement(newDiv,'text',resCffcnts[cursor++],['defMrgnL','red','it']);
-    //resCffcnts.shift();
+    insertText(newDiv,'≤',['defMrgnL']);    
+    insertElement(newDiv,'text',resCffcnts[cursor++],['defMrgnL','red','coefMrgnR']);
     mdlResTable.appendChild(newDiv);
+  }
+  const newDiv = document.createElement('div');
+    newDiv.classList.add('fnctnWrppr')
+    for (let c=0;c<numVar;c++) {
+      insertText(newDiv,'X',[]);
+      insertText(newDiv,c+1,['sub']);    
+      if(c!= numVar-1) insertText(newDiv,',',['comma']);
+    }
+    insertText(newDiv,'≥ 0',['defMrgnL']);    
+    mdlResTable.appendChild(newDiv);
+}
+
+function createEquation(HTMLInequation){
+  const eq = HTMLInequation.cloneNode(true);
+  eq.id = ('E' + HTMLInequation.id);
+  const fVarindex = eq.id.slice(eq.id.length-1,eq.id.length);
+  eq.removeChild(eq.children[eq.childElementCount-2]);
+  
+  eq.insertBefore(createCustomElement('text','','+',['defMrgnL']), eq.lastElementChild)
+  eq.insertBefore(createCustomElement('text','','F',['defMrgnL']), eq.lastElementChild)
+  eq.insertBefore(createCustomElement('text','', fVarindex,['sub']), eq.lastElementChild)
+  eq.insertBefore(createCustomElement('text','','=',['defMrgnL']), eq.lastElementChild)
+  return(eq);  
+}
+
+function insertEquations(){
+  fVarIns.appendChild(createCustomElement("text", "", "Restrição Original (Inequação)", []));
+  fVarIns.appendChild(createCustomElement("text", "", "Restrição com variável de folga (Equação)", []));
+  const ineqs = mdlResTable.querySelectorAll('div[id^=resRow');
+  for (const ineq of ineqs){
+    fVarIns.insertBefore(ineq, fVarIns.children[1]);
+    const eq = createEquation(ineq);
+    fVarIns.appendChild(eq);
   }
 }
 
+function showEquations(group){  
+  for (const a of fVarIns.querySelectorAll(`div[id*=resRow`)) if (!(a.classList.contains('hide'))) a.classList.add('hide');
+  for (const b of fVarIns.querySelectorAll(`div[id*=resRow${group}`)) toggleElement(b);
+}
+
+function nextRes(resCont){
+  showEquations(resCont);
+  resCont == numRes ? nxtInnrStpBtn.disabled = true : nxtInnrStpBtn.disabled = false;
+  resCont == 1 ? prvInnrStpBtn.disabled = true : prvInnrStpBtn.disabled = false;
+}

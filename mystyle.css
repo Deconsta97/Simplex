@@ -124,12 +124,18 @@ table#simTbl tr:last-child td:not(:first-child) {
   width: fit-content;
 }
 
+button:focus, input:focus, select:focus {
+  outline: none;
+  border-color: #f7a90085;
+  border-width: 2px;
+  border-style: solid;
+}
+
 .fnctnWrppr {
   width: fit-content;
   height: fit-content;
   display: flex;
   flex-direction: row;
-  justify-content: center;
   padding: 0%;
   margin: 15px;
 }
@@ -160,9 +166,8 @@ table#simTbl tr:last-child td:not(:first-child) {
   text-align: end;
 }
 
-#prvStpBtn,
-#nxtStpBtn {
-  width: 100px;
+.defBtn{
+  width: fit-content;
   margin-left: 1%;
   margin-right: 1%;
   white-space: nowrap;
@@ -177,6 +182,10 @@ table#simTbl tr:last-child td:not(:first-child) {
   margin-right: 15px;
 }
 
+.coefMrgnR {
+  margin-right: 2.5px;
+}
+
 
 .red{
   color: rgb(145, 12, 12);
@@ -186,6 +195,58 @@ table#simTbl tr:last-child td:not(:first-child) {
   font-style: italic;
 }
 
+ .comma{
+    margin-right: 5%;
+ }
+
+ .resTableWrppr {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.mdlResTableWrppr {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    justify-content: center;
+    align-items: start;
+    margin: 1%;
+}
+
+.fnctnWrppr,
+.inputWrppr,
+#resSlct text,
+#mdlOvrvw text
+{
+  white-space:nowrap;
+  font-family: "Cambria Math";
+  font-size:1em;
+}
+
+.varInsWrppr {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    padding: 10px;
+    white-space: nowrap;
+}
+
+ /*
+  For Firefox
+input[type='number'] {
+  -moz-appearance:textfield;
+}
+  Webkit browsers like Safari and Chrome
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+*/
 .hide{
   display: none;
  }
