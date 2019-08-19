@@ -55,7 +55,6 @@ function insertText(parentObject, contentString, classArray){
 
 function insertElement(parentObject, elementKind, contentString, classArray){
   const newElement = document.createElement(elementKind);
-
   newElement.innerHTML = contentString;
   if (classArray.length != 0) {
     for (let classElmnt of classArray) {
@@ -141,26 +140,29 @@ function nextStep() {
       toggleElement(resTable);
       break;
     case 5: //Visualizando o Modelo
-      nxtStpBtn.innerText = "Próximo Capítulo";
+      nxtStpBtn.innerText = 'Próximo Capítulo';
       updateModel();
       toggleElement(resTable);
       toggleElement(mdlOvrvw);
       break;
     case 6: //Variaveis de folga
-      toggleElement(mdlOvrvw);
-      toggleElement(nxtStpBtn);
-      toggleElement(prvStpBtn);
-      toggleElement(fVarIns);
-      toggleElement(nxtInnrStpBtn);
-      toggleElement(prvInnrStpBtn);  
-      insertEquations();
-      showEquations(1);
       let r=1;
-      nxtInnrStpBtn.addEventListener('click', ()=>{nextRes(++r)});
-      prvInnrStpBtn.addEventListener('click', ()=>{nextRes(--r)});
+      nxtStpBtn.innerText = 'Próximo Capítulo';
+      toggleElements([mdlOvrvw, nxtStpBtn, prvStpBtn, fVarIns, nxtInnrStpBtn, prvInnrStpBtn]); 
+      insertEquations();
+      updateMdlOvrvw();
+      showEquations(r);
+      prvInnrStpBtn.addEventListener('click', ()=>{
+        nextRes(--r);
+        if (r == numRes) toggleElements([mdlOvrvw, fVarIns, nxtStpBtn, nxtInnrStpBtn]);
+      });
+      nxtInnrStpBtn.addEventListener('click', ()=>{
+        nextRes(++r)
+        if (r == numRes+1) toggleElements([nxtInnrStpBtn, nxtStpBtn, fVarIns, mdlOvrvw]);
+      });     
       break;
     default:
-      alert("[...]And I'm Iron Man");
+     easter();
   }
 }
 
@@ -182,17 +184,24 @@ function previousStep(){
       toggleElement(resSlct);
     break;
     case 4: //Visualizando o Modelo
+      nxtStpBtn.innerText = '🡆';
       toggleElement(mdlOvrvw);
       toggleElement(resTable);
     break;
     default:
-      alert("[...]And I'm Iron Man.");
+      easter();
   }
 }
 
-function toggleElement(elmnt){
-  elmnt.classList.toggle('hide');
+function toggleElement(object){
+  object.classList.toggle('hide');
 }
+
+function toggleElements(objects){
+  for (const object of objects) object.classList.toggle('hide');
+}
+
+
 
 function updateObjFnctn(){
   objFnctn.innerHTML= null;
@@ -299,13 +308,33 @@ function insertEquations(){
   }
 }
 
-function showEquations(group){  
+function showEquations(group){
+  if(group>numRes) return 0;  
   for (const a of fVarIns.querySelectorAll(`div[id*=resRow`)) if (!(a.classList.contains('hide'))) a.classList.add('hide');
   for (const b of fVarIns.querySelectorAll(`div[id*=resRow${group}`)) toggleElement(b);
 }
 
 function nextRes(resCont){
   showEquations(resCont);
-  resCont == numRes ? nxtInnrStpBtn.disabled = true : nxtInnrStpBtn.disabled = false;
-  resCont == 1 ? prvInnrStpBtn.disabled = true : prvInnrStpBtn.disabled = false;
+  nxtInnrStpBtn.disabled = (resCont == numRes+1)? true : false;
+  prvInnrStpBtn.disabled = (resCont == 1)? true : false;
+}
+
+function updateMdlOvrvw(){
+  const lstRes = mdlResTable.lastElementChild;
+  for (const eq of document.querySelectorAll('div[id*=EresRow]')){
+    mdlResTable.insertBefore(eq.cloneNode(true), lstRes);
+    lstRes.insertBefore(createCustomElement('text','',',', ['comma']),lstRes.lastElementChild);
+    lstRes.insertBefore(createCustomElement('text','','F', []),lstRes.lastElementChild);
+    lstRes.insertBefore(createCustomElement('text','',eq.id[eq.id.length-1],['sub']),lstRes.lastElementChild);
+  }
+}
+
+function easter(){
+  alert('Oh no! A bug');
+  document.body.appendChild(createCustomElement('div', 'easter', '', ['easter']));
+  setTimeout(function () {
+    document.body.innerHTML = null;
+    document.body.classList.toggle('gradient');
+  }, 4200);
 }
