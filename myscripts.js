@@ -188,7 +188,7 @@ function previousStep(){
       toggleElements([mdlOvrvw, resTable]);
     break;
     default:
-      easter();
+      easter()
   }
 }
 
