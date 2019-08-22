@@ -23,8 +23,7 @@ const mdlFnctn = $('#mdlFnctn');
 const mdlResTable = $('#mdlResTable');
 const fVarIns = $('#fVarIns');
 
-updtTblBtn.addEventListener('click', createTable);
-clrTblBtn.addEventListener('click', clearTable);
+//clrTblBtn.addEventListener('click', clearTable);
 prvStpBtn.addEventListener('click', previousStep);
 nxtStpBtn.addEventListener('click', nextStep);
 
@@ -126,28 +125,25 @@ function nextStep() {
     case 2: //Definindo modelo da função
       updateValues();
       updateObjFnctn();
-      toggleElement(varSlct);
-      toggleElement(objFnctn);
+      toggleElements([varSlct, objFnctn]);
       break;
     case 3: //Definindo numero de restricoes
-      toggleElement(objFnctn);
-      toggleElement(resSlct);
+      toggleElements([objFnctn, resSlct]);
       break;
     case 4: //Definindo coeficientes e termos das restricoes
       updateValues();
       updateResTable();
-      toggleElement(resSlct);
-      toggleElement(resTable);
+      toggleElements([resSlct, resTable]);
       break;
     case 5: //Visualizando o Modelo
       nxtStpBtn.innerText = 'Próximo Capítulo';
       updateModel();
-      toggleElement(resTable);
-      toggleElement(mdlOvrvw);
+      toggleElements([resTable, mdlOvrvw]);
       break;
     case 6: //Variaveis de folga
       let r=1;
       nxtStpBtn.innerText = 'Próximo Capítulo';
+      nxtStpBtn.disabled = false;
       toggleElements([mdlOvrvw, nxtStpBtn, prvStpBtn, fVarIns, nxtInnrStpBtn, prvInnrStpBtn]); 
       insertEquations();
       updateMdlOvrvw();
@@ -161,6 +157,13 @@ function nextStep() {
         if (r == numRes+1) toggleElements([nxtInnrStpBtn, nxtStpBtn, fVarIns, mdlOvrvw]);
       });     
       break;
+      case 7: //Quadro Inicial
+      nxtStpBtn.innerText = '🡆';
+      prvStpBtn.disabled = true;
+      toggleElements([prvStpBtn, prvInnrStpBtn, mdlOvrvw]);
+      createTable();
+      setHTMLtable();
+      break;
     default:
      easter();
   }
@@ -172,21 +175,17 @@ function previousStep(){
   if (stepIndex < 5) nxtStpBtn.disabled = false;
   switch (stepIndex) {
     case 1: //Definindo numero de variáveis
-      toggleElement(objFnctn);
-      toggleElement(varSlct);
+    toggleElements([objFnctn, varSlct]);
       break;
     case 2: //Definindo modelo da função
-      toggleElement(resSlct);
-      toggleElement(objFnctn);
+      toggleElements([resSlct, objFnctn]);
       break;
     case 3: //Definindo modelo da função
-      toggleElement(resTable);
-      toggleElement(resSlct);
+    toggleElements([resTable, resSlct]);
     break;
     case 4: //Visualizando o Modelo
       nxtStpBtn.innerText = '🡆';
-      toggleElement(mdlOvrvw);
-      toggleElement(resTable);
+      toggleElements([mdlOvrvw, resTable]);
     break;
     default:
       easter();
@@ -233,11 +232,12 @@ function updateResTable(){
   }
 }
 
-function getInputsValue(parentNode) { 
+function getInputsNumbers(parentNode,negate) { 
   let inputValues = [];
   for (let HTMLElmnt of parentNode.querySelectorAll('input')){
     if(HTMLElmnt.value == '') HTMLElmnt.value = 0;
-    inputValues.push(parseInt(HTMLElmnt.value));
+    if(negate) inputValues.push(parseInt(HTMLElmnt.value*-1))
+    else inputValues.push(parseInt(HTMLElmnt.value));
   }
   return inputValues;
 }
@@ -245,7 +245,7 @@ function getInputsValue(parentNode) {
 function updateModel(){   
   //FUNCAO OBJETIVO
   mdlFnctn.innerHTML = null;
-  let varCffcnts = getInputsValue(objFnctn);
+  let varCffcnts = getInputsNumbers(objFnctn);
   insertText(mdlFnctn,'Maximizar Z =',[]);
   for (let c=0;c<numVar;c++) {
     insertElement(mdlFnctn,'text',varCffcnts[c],['defMrgnL','red','coefMrgnR']);
@@ -255,7 +255,7 @@ function updateModel(){
   }
   //Restricoes OBJETIVO
   mdlResTable.innerHTML = null;
-  let resCffcnts = getInputsValue(resTable);
+  let resCffcnts = getInputsNumbers(resTable);
   //insertElement(mdlResTable,'div',null,['resTableWrppr']);
   insertText(mdlResTable,'Sujeito a:',['fnctnWrppr']);
   let cursor = 0;
@@ -337,4 +337,46 @@ function easter(){
     document.body.innerHTML = null;
     document.body.classList.toggle('gradient');
   }, 4200);
+}
+
+function initJsTable() {
+  let i = j = 0;
+  let jsTable = [];
+  for (i = 0; i < numRes + 1; i++) {
+    //inicializando a linha
+    jsTable.push([]);
+    for (j = 0; j < (numVar+numRes)+2; j++) {
+    //inicializando coluna
+      jsTable[i].push(0);
+    }
+    jsTable[i][numVar+i] = 1;
+  }
+  return(jsTable);
+}
+
+function setJsTable(jsTable){
+  const values = getInputsNumbers(resTable).concat(getInputsNumbers(objFnctn,1));
+  let cursor = 0;
+  for (let i = 0; i < numRes + 1; i++) { 
+    for (let j = 0; j < (numVar+numRes)+2; j++) {
+       if (j < numVar) jsTable[i][j] = values[cursor++];
+       if (j == numVar+numRes+1 && i < numRes) jsTable[i][j] = values[cursor++];
+    }
+  }
+  return(jsTable);
+}
+
+function toArray(jsTable){
+  let newArray = [];
+  for(const array of jsTable) newArray = newArray.concat(array);
+return(newArray);
+}
+
+function setHTMLtable() {
+  let cursor = 0;
+  let newJsTable = initJsTable();
+  newJsTable = setJsTable(newJsTable);
+  const valuesArray = toArray(newJsTable);
+  const tds = Table.querySelectorAll('td');
+  for (const td of tds) if (td.innerHTML == '') td.innerText = valuesArray[cursor++];
 }
