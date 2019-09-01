@@ -120,7 +120,7 @@ function createTable(){
 function nextStep() {
   stepIndex++;
   if (stepIndex > 1) prvStpBtn.disabled = false;
-  if (stepIndex >= 6) nxtStpBtn.disabled = true;
+  if (stepIndex >= 8) nxtStpBtn.disabled = true;
   switch (stepIndex) {
     case 2: //Definindo modelo da função
       updateValues();
@@ -136,36 +136,118 @@ function nextStep() {
       toggleElements([resSlct, resTable]);
       break;
     case 5: //Visualizando o Modelo
-      nxtStpBtn.innerText = 'Próximo Capítulo';
+      nxtStpBtn.innerText = "Próximo Capítulo";
       updateModel();
       toggleElements([resTable, mdlOvrvw]);
       break;
     case 6: //Variaveis de folga
-      let r=1;
-      nxtStpBtn.innerText = 'Próximo Capítulo';
+      let r = 1;
+      nxtStpBtn.innerText = "Próximo Capítulo";
       nxtStpBtn.disabled = false;
-      toggleElements([mdlOvrvw, nxtStpBtn, prvStpBtn, fVarIns, nxtInnrStpBtn, prvInnrStpBtn]); 
+      toggleElements([mdlOvrvw, nxtStpBtn, prvStpBtn, fVarIns, nxtInnrStpBtn, prvInnrStpBtn]);
       insertEquations();
       updateMdlOvrvw();
       showEquations(r);
-      prvInnrStpBtn.addEventListener('click', ()=>{
+      prvInnrStpBtn.addEventListener("click", () => {
         nextRes(--r);
         if (r == numRes) toggleElements([mdlOvrvw, fVarIns, nxtStpBtn, nxtInnrStpBtn]);
       });
-      nxtInnrStpBtn.addEventListener('click', ()=>{
-        nextRes(++r)
-        if (r == numRes+1) toggleElements([nxtInnrStpBtn, nxtStpBtn, fVarIns, mdlOvrvw]);
-      });     
+      nxtInnrStpBtn.addEventListener("click", () => {
+        nextRes(++r);
+        if (r == numRes + 1) toggleElements([nxtInnrStpBtn, nxtStpBtn, fVarIns, mdlOvrvw]);
+      });
       break;
-      case 7: //Quadro Inicial
-      nxtStpBtn.innerText = '🡆';
-      prvStpBtn.disabled = true;
-      toggleElements([prvStpBtn, prvInnrStpBtn, mdlOvrvw]);
+    case 7: //Quadro Inicial
+      toggleElements([mdlOvrvw, nxtStpBtn,nxtInnrStpBtn]);
       createTable();
       setHTMLtable();
+
+      prv = prvInnrStpBtn.cloneNode(true);
+      document.querySelector('.buttonWrppr').removeChild(prvInnrStpBtn);
+      document.querySelector('.buttonWrppr').appendChild(prv);
+      prv.disabled = true;
+
+      nxt = nxtInnrStpBtn.cloneNode(true);
+      document.querySelector('.buttonWrppr').removeChild(nxtInnrStpBtn);
+      document.querySelector('.buttonWrppr').appendChild(nxt);
+      nxt.disabled = false;
+
+      const stepsHistory = [];//historico de quadros
+      const TblMap = mapHTMLtable(Table);//mapear tabela
+      stepsHistory.push(Table.cloneNode(true));
+      let ngtvs = negatives(Table.querySelectorAll(`tr:last-child td:not(:first-child)`));
+       
+      //if (!ngtvs) break;
+      while(ngtvs.length != 0){
+        //
+        highLight(ngtvs, 'yellow');
+        stepsHistory.push(Table.cloneNode(true));
+        highLight(ngtvs, 'yellow');
+        //
+        let lowest = lwst(ngtvs);
+        let p = findOnMap(lowest, TblMap);
+        highLightJ(p, TblMap, 'yellow');
+        stepsHistory.push(Table.cloneNode(true));
+        highLightJ(p, TblMap, 'yellow');
+        //
+        const vCol = document.querySelectorAll(`Table tr:not(:first-child):not(:last-child) td:nth-child(${p[1]+1})`);
+        const lCol = document.querySelectorAll('Table tr:not(:first-child):not(:last-child) td:last-child');
+        highLight(vCol,'yellow');
+        highLight(lCol,'burlywood');
+        lowest = lwstQuotnt(lCol,vCol);
+        lowest.style.color = 'red';
+        stepsHistory.push(Table.cloneNode(true));
+        lowest.style.color = '';
+        highLight(vCol,'yellow');
+        highLight(lCol,'burlywood');
+        //
+        p = findOnMap(lowest, TblMap);//posicao do pivot
+        const v = lowest.innerText;
+        const pivotLine = Table.querySelectorAll(`tr:nth-child(${p[0]+1}) td:not(:first-child)`);
+        for (el of pivotLine) el.innerText = parseFloat(((parseFloat(el.innerText/v)).toFixed(4)));
+        highLight(pivotLine, 'yellow');
+        stepsHistory.push(Table.cloneNode(true));
+        //highLight(pivotLine, 'yellow');
+        //#0000ff85
+        //
+        const newCol = Table.querySelectorAll(`tr:not(:first-child):not(:nth-child(${p[0]+1})`);
+        for (const tr of newCol){
+          const tds = tr.querySelectorAll(`td:not(:first-child)`);
+          const eCCPVal = (tds[p[1]-1].innerText)*-1;
+          let cursr = 0;
+          highLight(tds, '#0000ff85');
+          for(const td of tds){
+            td.innerText = parseFloat((parseFloat(td.innerText) + eCCPVal*parseFloat(pivotLine[cursr++].innerText)).toFixed(4));
+          }
+          stepsHistory.push(Table.cloneNode(true));
+          highLight(tds, '#0000ff85');         
+        }
+        highLight(pivotLine, 'yellow');
+        TblMap[p[0]][0].innerText = TblMap[0][p[1]].innerText; 
+        stepsHistory.push(Table.cloneNode(true));
+        ngtvs = negatives(Table.querySelectorAll(`tr:last-child td:not(:first-child)`))
+      }
+
+      let cursor = 0;
+        const Body = document.body;
+        Body.insertBefore(stepsHistory[cursor], Body.lastElementChild); 
+        nxt.addEventListener('click',() =>{
+          Body.removeChild(Body.children[8]);
+          Body.insertBefore(stepsHistory[++cursor], Body.lastElementChild);
+          nxt.disabled = (cursor == stepsHistory.length-1)? true : false;
+          prv.disabled = (cursor <= 0)? true : false;          
+        });
+
+        prv.addEventListener('click',() =>{
+          Body.removeChild(Body.children[8]);
+          Body.insertBefore(stepsHistory[--cursor], Body.lastElementChild);
+          nxt.disabled = (cursor == stepsHistory.length-1)? true : false;
+          prv.disabled = (cursor <= 0)? true : false;
+        });     
+      toggleElements([Table]);
       break;
     default:
-     easter();
+      easter();
   }
 }
 
@@ -199,8 +281,6 @@ function toggleElement(object){
 function toggleElements(objects){
   for (const object of objects) object.classList.toggle('hide');
 }
-
-
 
 function updateObjFnctn(){
   objFnctn.innerHTML= null;
@@ -379,4 +459,83 @@ function setHTMLtable() {
   const valuesArray = toArray(newJsTable);
   const tds = Table.querySelectorAll('td');
   for (const td of tds) if (td.innerHTML == '') td.innerText = valuesArray[cursor++];
+}
+
+function mapHTMLtable(Tbl){
+  const tBody = Tbl.children[0].children[0].children;
+  let HTMLtableMap = [];
+  let i = 0;
+  for (const tr of tBody) {
+    HTMLtableMap.push([]);
+    for (const td of tr.children) {
+      HTMLtableMap[i].push(td);//td.innerText
+    }
+    i++;
+  }
+  return(HTMLtableMap);
+}
+
+function negatives(objLine){
+  const ngtvsArray = []
+  for (const val of objLine ){
+    const n = parseFloat(val.innerText);
+    if(n < 0) ngtvsArray.push(val);
+  }
+  return ngtvsArray;
+}
+
+function highLight(elements, color) {
+  for (const el of elements) {
+    if (el.style.backgroundColor == '') el.style.backgroundColor = color;
+    else el.style.backgroundColor = '';
+  }
+}
+
+function highLightJ(ColumnIndex, mappedHTMLtable, color) {
+  for (let i = 0; i < rows; i++) {
+    highLight([mappedHTMLtable[i][ColumnIndex[1]]], color);
+  }
+}
+
+function highLightI(ColumnIndex, mappedHTMLtable) {
+  for (let j = 0; j < columns; j++) {
+    highLight([mappedHTMLtable[ColumnIndex[0]][j]]); 
+  }
+}
+
+function lwst(array){
+  let elVal = [0,999];
+  for(const el of array){
+    if ( parseFloat(el.innerText) < elVal[1]){
+      elVal[0] = el;
+      elVal[1] = parseFloat(el.innerText);
+    }
+  }
+  return elVal[0];
+}
+
+function lwstQuotnt(numArray, DenArray){
+  let elVal = [0,0];
+  lwstQ = 999;
+  for(let c = 0; c < numArray.length; c++){
+    if ( DenArray[c].innerText > 0 && numArray[c].innerText/DenArray[c].innerText < lwstQ){
+      lwstQ = numArray[c].innerText/DenArray[c].innerText;
+      elVal[0] = DenArray[c];
+      elVal[1] = parseFloat(DenArray[c].innerText);
+    }
+  }
+  return elVal[0];
+}
+
+
+function findOnMap(element, mappedHTMLtable){
+  const pos = [0, 0];
+  for (const els of mappedHTMLtable){
+    for (const el of els){
+      if (element === el) return pos;
+      pos[1]++;
+    }
+    pos[0]++;
+    pos[1]=0;
+  }
 }
