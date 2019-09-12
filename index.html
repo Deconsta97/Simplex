@@ -1,46 +1,82 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel='stylesheet' type='text/css' href='./mystyle.css' />
-    <script defer='' src='myscripts.js'></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="./mystyle.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script defer="" src="myscripts.js"></script>
+    <script defer="" src="guide.js"></script>
   </head>
-  <body class='gradient'>
+  <body class="gradient">
     <h2>Simplex Alpha 0</h2>
-    <div id='Table'></div>
-    <div id='varSlct' class='inputWrppr'>
+    <div id="descCards" class="dCWrppr">
+      <div id="statDescCard" class="sttcCard">
+        <h3>Definição do Modelo</h3>
+        <text id="inDesc"></text>
+        <ol>
+          <li class="markEl">Informe a quatidade de variáveis</li>
+          <li>Defina a Função Objetivo</li>
+          <li>Informe a quantidade de restrições</li>
+          <li>Defina as restrições</li>
+          <li>Visualização do Modelo</li>
+        </ol>
+        <ol id='simOl' hidden="">
+          <li>Definir o quadro inicial</li>
+          <li>Aplicar o teste de otimização</li>
+          <li>Determinar a coluna do pivô</li>
+          <li>Determinar a linha do pivô</li>
+          <li>Determinar novo quadro
+            <ol id='innOl'>
+              <li>Dividir a linha do pivô;</li>
+                <li>Adicionar múltiplos da linha do pivô;</li>
+                <li>Retornar a 2ª Etapa</li>
+            </ol>
+          </li>
+        </ol>
+      </div>
+      <div id="dinaDescCard" class="dnmcCard">
+        <h3>Informe a quatidade de variáveis</h3>
+        <text>placeholder</text>
+      </div>
+    </div>
+    <div id="Table"></div>
+    <div id="varSlct" class="inputWrppr">
       <text>Selecione o número de variáveis</text>
-      <div id='varInput' class='varBtnsWrppr' value='1'>
-        <button value='1' class='varResBtn'>1</button>
-        <button value='2' class='varResBtn'>2</button>
-        <button value='3' class='varResBtn'>3</button>
-        <button value='4' class='varResBtn'>4</button>
-        <button value='5' class='varResBtn'>5</button>
+      <div id="varInput" class="varBtnsWrppr" value="1">
+        <button value="1" class="varResBtn">1</button>
+        <button value="2" class="varResBtn">2</button>
+        <button value="3" class="varResBtn">3</button>
+        <button value="4" class="varResBtn">4</button>
+        <button value="5" class="varResBtn">5</button>
       </div>
     </div>
-    <div id='objFnctn' class='hide fnctnWrppr'></div>
-    <div id='resSlct' class='hide inputWrppr'>
+    <div id="objFnctn" class="hide fnctnWrppr"></div>
+    <div id="resSlct" class="hide inputWrppr">
       <text>Selecione o número de restrições</text>
-      <div id='resInput' class='varBtnsWrppr' value='1'>
-        <option value='1' class='varResBtn'>1</option>
-        <option value='2' class='varResBtn'>2</option>
-        <option value='3' class='varResBtn'>3</option>
-        <option value='4' class='varResBtn'>4</option>
-        <option value='5' class='varResBtn'>5</option>
+      <div id="resInput" class="varBtnsWrppr" value="1">
+        <button value="1" class="varResBtn">1</button>
+        <button value="2" class="varResBtn">2</button>
+        <button value="3" class="varResBtn">3</button>
+        <button value="4" class="varResBtn">4</button>
+        <button value="5" class="varResBtn">5</button>
       </div>
     </div>
-    <div id='resTable' class='hide resTableWrppr'></div>
-    <div id='mdlOvrvw' class='hide mdlOvrvwWrppr'>
-      <div id='mdlFnctn' class='fnctnWrppr'></div>
-      <div id='mdlResTable' class='resTableWrppr'></div>
+    <div id="resTable" class="hide resTableWrppr"></div>
+    <div id="mdlOvrvw" class="hide mdlOvrvwWrppr">
+      <div id="mdlFnctn" class="fnctnWrppr"></div>
+      <div id="mdlResTable" class="resTableWrppr"></div>
     </div>
-    <div id='fVarIns' class='hide varInsWrppr'></div>
+    <div id="fVarIns" class="hide varInsWrppr"></div>
 
-    <div class='buttonWrppr'>
-      <button id='prvStpBtn' class='defBtn' disabled>Voltar</button>
-      <button id='prvInnrStpBtn' class='hide defBtn'disabled>Voltar</button>
-      <button id='nxtStpBtn' class='defBtn' disabled>Avançar</button>
-      <button id='nxtInnrStpBtn' class='hide defBtn'>Avançar</button>
-      <button id='strtOvrBtn' class='hide defBtn'>Novo Problema</button>
-    </div>   
+    <div id="naviBtns" class="buttonWrppr">
+      <button id="nxtStpBtn" class="defBtn" disabled="">Avançar</button>
+      <button id="nxtInnrStpBtn" class="hide defBtn">Avançar</button>
+      <button id="prvStpBtn" class="defBtn" disabled="">Voltar</button>
+      <button id="prvInnrStpBtn" class="hide defBtn" disabled="">Voltar</button>
+      <button id="strtOvrBtn" class="hide defBtn">Novo Problema</button>
+    </div>
   </body>
 </html>

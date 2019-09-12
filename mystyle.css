@@ -1,4 +1,5 @@
 body {
+  box-sizing: border-box;
   width: -webkit-fill-available;
   height: -webkit-fill-available;
   border-color: black;
@@ -11,17 +12,23 @@ body {
 }
 
 .gradient {
-  background-image: linear-gradient(to right, #da00ff, #07fff4);
+  background-image: url(./resources/marineBgNoise.png);
 }
 
-.easter{
-  background-image:url(https://media1.tenor.com/images/01364e7fa4776c0f1f075f0e33b600c5/tenor.gif?itemid=14038823);
+.easter {
+  background-image: url(https://media1.tenor.com/images/01364e7fa4776c0f1f075f0e33b600c5/tenor.gif?itemid=14038823);
   background-position: center;
   background-repeat: no-repeat;
   height: 212px;
   width: 490px;
 }
 
+.byzero {
+  background-image: url(./resources/byzero.png);
+  height: -webkit-fill-available;
+  width: -webkit-fill-available;
+  cursor: none;
+}
 
 table#simTbl {
   background-color: white;
@@ -122,15 +129,11 @@ table#simTbl tr:last-child td:not(:first-child) {
   width: 265px;
 }
 
-.inputWrppr text{
-  
-box-sizing: border-box;
-  
-padding: 1%;
-  
-margin: 1.5% 0% 1.5% 0%;
-  
-font-size: 1.5em;
+.inputWrppr text {
+  box-sizing: border-box;
+  padding: 1%;
+  margin: 1.5% 0% 1.5% 0%;
+  font: 1.5em "Open Sans", sans-serif;
 }
 
 .buttonWrppr {
@@ -139,20 +142,21 @@ font-size: 1.5em;
   padding: 0%;
   box-sizing: border-box;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  height: 128px;
+  height: 20vh;
   position: fixed;
-  bottom: 35vh;
-  right: 20vw;
+  bottom: 38%;
+  right: 20%;
 }
 
-button:focus, input:focus, select:focus {
-  outline: none;
-  border-color: #f7a90085;
-  border-width: 2px;
-  border-style: solid;
+button:focus,
+input:focus,
+select:focus {
+  outline: #ffc0592b solid 2px;
+  box-shadow: 0 1px 3px 0 #3c40434d, 0 4px 8px 3px #3c404326;
+  transition: 0.2s;
 }
 
 .fnctnWrppr {
@@ -185,31 +189,35 @@ button:focus, input:focus, select:focus {
   box-sizing: border-box;
 }
 
-#objFnctn input, [id*="resRow"] input, #mdlOvrvw input {
+#objFnctn input,
+[id*="resRow"] input,
+#mdlOvrvw input {
   width: 32px;
   text-align: end;
 }
 
-.defBtn{
+.defBtn {
   margin-left: 1%;
   margin-right: 1%;
   white-space: nowrap;
   box-sizing: border-box;
   width: 7.5vw;
-  height: 6vh;
-  border-radius: 5px;
-  border: solid black 1.5px;
+  height: 5.5vh;
+  border-radius: 55px;
   background: white;
   outline: unset;
-  padding: 1%;
-  margin: 1%;
+  padding: 0;
+  margin: 0;
   text-align: center;
-  font: bold 0.8em "Clear Sans";
+  font: bold 0.7vw "Open Sans", sans-serif;
+  border: unset;
+  box-shadow: 0 1px 2px 0 #3c40434d, 0 1px 3px 1px #3c404326;
 }
 
-.defBtn:hover{
-background: #6889f9;
-transition: .2s;
+.defBtn:hover {
+  background: #eaeaea;
+  box-shadow: 0 1px 3px 0 #3c40434d, 0 4px 8px 3px #3c404326;
+  transition: 0.2s;
 }
 
 .defMrgnL {
@@ -224,20 +232,19 @@ transition: .2s;
   margin-right: 2.5px;
 }
 
-
-.red{
+.red {
   color: rgb(145, 12, 12);
 }
 
-.it{
+.it {
   font-style: italic;
 }
 
- .comma{
-    margin-right: 5%;
- }
+.comma {
+  margin-right: 5%;
+}
 
- .resTableWrppr {
+.resTableWrppr {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -245,92 +252,228 @@ transition: .2s;
 }
 
 .mdlResTableWrppr {
-    display: flex;
-    flex-direction: column;
-    text-align: start;
-    justify-content: center;
-    align-items: start;
-    margin: 1%;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  justify-content: center;
+  align-items: start;
+  margin: 1%;
 }
 
 .fnctnWrppr,
 .inputWrppr,
-#mdlOvrvw text
-{
-  white-space:nowrap;
+#mdlOvrvw text {
+  white-space: nowrap;
   font-family: "Cambria Math";
-  font-size:1em;
+  font-size: 1em;
 }
 
 .varInsWrppr {
-    align-items: center;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    margin: 5px;
-    padding: 10px;
-    white-space: nowrap;
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+  padding: 10px;
+  white-space: nowrap;
+  font: 1.2em "Open Sans", sans-serif;
 }
 
- /*
-  For Firefox
+/*
+For Firefox
 input[type='number'] {
-  -moz-appearance:textfield;
+-moz-appearance:textfield;
 }
-  Webkit browsers like Safari and Chrome
+Webkit browsers like Safari and Chrome
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+-webkit-appearance: none;
+margin: 0;
 }
 */
-.hide{
+.hide {
   display: none;
- }
+}
 
- .hl {
+.hl {
   background-color: #fbff00e3;
-  }
+}
 
 .varBtnsWrppr {
-    align-items: center;
-    justify-content: space-around;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: fit-content;
-    box-sizing: border-box;
-    padding: 1.5%;
-    margin: 1.5%;
+  align-items: center;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: fit-content;
+  box-sizing: border-box;
+  padding: 1.5%;
+  margin: 1.5%;
 }
-.varResBtn{
+
+.varResBtn {
   background: white;
   border-radius: 100%;
-  border: 1.5px black solid;
   box-sizing: border-box;
   color: black;
+  border: unset;
   font-family: "Cambria Math";
   font-size: 2em;
   text-align: center;
-  width: 17%;
+  width: 40px;
+  box-shadow: 0 1px 2px 0 #3c40434d, 0 1px 3px 1px #3c404326;
 }
 
 .varResBtn:hover {
-    background: gray;
-    color: white;
-    border: 1.5px white solid;
-    cursor: pointer;
-    transition: .2s;
+  border: unset;
+  cursor: pointer;
+  box-shadow: 0 2.5px 10px 0px #3c40434d, 0 4px 8px 3px #3c404326;
+  transition: 0.2s;
 }
 
 .varResBtn:active {
   background: black;
   color: white;
-  border: 1.5px white solid;
+  border: unset;
 }
 
 .varResBtn--slctd {
   background: black;
   color: white;
-  border: 1.5px white solid;
+  border: unset;
+  box-shadow: 0 2.5px 10px 0px #3c40434d, 0 4px 8px 3px #3c404326;
+}
+
+.fraction-box {
+  align-items: center;
+  background-color: white;
+  border-radius: 15px;
+  border: solid gray 1px;
+  box-sizing: border-box;
+  box-shadow: 0 2.5px 10px 0px #3c40434d, 0 4px 8px 3px #3c404326;
+  display: flex;
+  font-family: "Cambria Math";
+  font-size: 1.5em;
+  font-variant-numeric: diagonal-fractions;
+  height: fit-content;
+  justify-content: center;
+  padding: 1%;
+  pointer-events: none;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: 0.01s;
+  width: fit-content;
+}
+
+@media all and (max-height: 600px) {
+  body {
+    width: 100%;
+    height: 150vh;
+  }
+
+  .buttonWrppr {
+    /* background-color: #ff000036; */
+    margin: 1% 1% 1% 1%;
+    padding: 0%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    height: fit-content;
+    bottom: 0vh;
+    right: 4%;
+  }
+
+  .defBtn {
+    margin-left: 1%;
+    margin-right: 1%;
+    white-space: nowrap;
+    box-sizing: border-box;
+    width: fit-content;
+    height: 7vh;
+    border-radius: 5px;
+    border: solid black 1.5px;
+    background: white;
+    outline: unset;
+    padding: 0%;
+    margin: 1%;
+    text-align: center;
+    font: bold 0.8em "Clear Sans";
+  }
+}
+
+.dCWrppr {
+  background-color: #ffffff;
+  border: 1px solid gray;
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  font-family: "Open Sans", sans-serif;
+  height: fit-content;
+  left: 0%;
+  margin: 0.5%;
+  padding: 0.5%;
+  position: fixed;
+  top: 0%;
+  width: 25vw;
+  text-align: justify;
+}
+
+.dCWrppr h3 {
+  padding: 0%;
+  margin: 1% 1.5% 1% 1.5%;
+  font-size: 1.25vw;
+  white-space: nowrap;
+}
+
+
+.dCWrppr ol {
+  /**/
+  width: -webkit-fill-available;
+  font-size: 1vw;
+}
+
+.sttcCard {
+  /* background-color: #ff000085; */
+  border-bottom: solid 1.5px;
+  line-height: 1.45vw;
+  text-align: start;
+}
+
+.dnmcCard {
+  /* background-color: green; */
+  line-height: 1.45vw;
+}
+
+.dCWrppr div {
+  padding: 1%;
+  margin: 1%;
+  box-sizing: border-box;
+}
+
+.defS {
+  box-shadow: 0 1px 3px 0 #3c40434d, 0 4px 8px 3px #3c404326;
+}
+
+.markEl {
+  color: red;
+  font-weight: bold;
+  box-shadow: red -1px 2px 0px -1px;
+  transition: .3s;
+}
+
+#innOl{  
+  color: black;    
+  font-weight: normal;    
+  box-shadow: unset;    
+  transition: 0s;
+  }
+
+.dCWrppr text {
+  /**/
+  width: -webkit-fill-available;
+  font-size: 1vw;
 }

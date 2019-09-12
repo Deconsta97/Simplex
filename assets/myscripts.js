@@ -18,8 +18,6 @@ function Simplex(BodyInitialState){
   const resSlct = $('#resSlct');
   const resInput = $('#resInput');
   resInput.value = 1;
-  const updtTblBtn = $('#updtTblBtn');
-  const clrTblBtn = $('#clrTblBtn');
   const nxtStpBtn = $('#nxtStpBtn');
   const prvStpBtn = $('#prvStpBtn');
   const nxtInnrStpBtn = $('#nxtInnrStpBtn');
@@ -69,7 +67,6 @@ function Simplex(BodyInitialState){
     }
     return elmnt;
   }
-
 
   function insertText(parentObject, contentString, classArray){
     const textElement = document.createElement('text');
@@ -166,6 +163,14 @@ function Simplex(BodyInitialState){
         updateValues();
         updateResTable();
         toggleElements([resSlct, resTable]);
+
+        const tcs = $(`#resTable`).querySelectorAll(`div input:last-child`);
+        for (const tc of tcs) {
+          tc.addEventListener('change', () => {
+            if (parseFloat(tc.value) < 0) tc.value *= -1;
+          });
+        }
+
         break;
       case 5: //Visualizando o Modelo
         nxtStpBtn.innerText = "Próximo Capítulo";
@@ -196,15 +201,15 @@ function Simplex(BodyInitialState){
         
         const HTMLbtns = document.querySelector('.buttonWrppr');
         
-        nxt = nxtInnrStpBtn.cloneNode(true);
-        HTMLbtns.removeChild(nxtInnrStpBtn);
-        HTMLbtns.insertBefore(nxt,HTMLbtns.firstChild);
-        nxt.disabled = false;
-
         prv = prvInnrStpBtn.cloneNode(true);
         HTMLbtns.removeChild(prvInnrStpBtn);
         HTMLbtns.insertBefore(prv,HTMLbtns.firstChild);
         prv.disabled = true;
+
+        nxt = nxtInnrStpBtn.cloneNode(true);
+        HTMLbtns.removeChild(nxtInnrStpBtn);
+        HTMLbtns.insertBefore(nxt,HTMLbtns.firstChild);
+        nxt.disabled = false;
 
         const stepsHistory = [];//historico de quadros
         const TblMap = mapHTMLtable(Table);//mapear tabela
@@ -212,7 +217,9 @@ function Simplex(BodyInitialState){
         let ngtvs = negatives(Table.querySelectorAll(`tr:last-child td:not(:first-child)`));
         
         //if (!ngtvs) break;
+        let it = 0;
         while(ngtvs.length != 0){
+          it++;
           //
           highLight(ngtvs, 'yellow');
           stepsHistory.push(Table.cloneNode(true));
@@ -238,7 +245,7 @@ function Simplex(BodyInitialState){
           p = findOnMap(lowest, TblMap);//posicao do pivot
           const v = lowest.innerText;
           const pivotLine = Table.querySelectorAll(`tr:nth-child(${p[0]+1}) td:not(:first-child)`);
-          for (el of pivotLine) el.innerText = parseFloat(((parseFloat(el.innerText/v)).toFixed(4)));
+          for (el of pivotLine) el.innerText = parseFloat(((parseFloat(el.innerText/v)).toFixed(3)));
           highLight(pivotLine, 'yellow');
           stepsHistory.push(Table.cloneNode(true));
           //
@@ -249,7 +256,7 @@ function Simplex(BodyInitialState){
             let cursr = 0;
             highLight(tds, '#0000ff85');
             for(const td of tds){
-              td.innerText = parseFloat((parseFloat(td.innerText) + eCCPVal*parseFloat(pivotLine[cursr++].innerText)).toFixed(4));
+              td.innerText = parseFloat((parseFloat(td.innerText) + eCCPVal*parseFloat(pivotLine[cursr++].innerText)).toFixed(3));
             }
             stepsHistory.push(Table.cloneNode(true));
             highLight(tds, '#0000ff85');         
@@ -259,35 +266,60 @@ function Simplex(BodyInitialState){
           stepsHistory.push(Table.cloneNode(true));
           ngtvs = negatives(Table.querySelectorAll(`tr:last-child td:not(:first-child)`))
         }
-
+        /*
+        for (const tableClone of stepsHistory){
+          const tds = tableClone.querySelectorAll(`tr:not(:first-child) td:not(:first-child)`);
+          addHoverFractions(tds);
+        }
+        */
         let cursor = 0;
           const Body = document.body;
           const btns = document.querySelector('.buttonWrppr');
           Body.insertBefore(stepsHistory[cursor], btns); 
-          nxt.addEventListener('click',() =>{
-            Body.removeChild(Body.querySelectorAll('#Table')[1]);
-            Body.insertBefore(stepsHistory[++cursor], btns);
-            nxt.disabled = (cursor == stepsHistory.length-1)? true : false;
-            prv.disabled = (cursor <= 0)? true : false;
-             
-            if(nxt.disabled) toggleElement(strtOvrdBtn);
+          
+          nxt.addEventListener("click", () => {
+            if (stepsHistory.length == 1) {
+              toggleElement(strtOvrdBtn);
+              nxt.disabled = true;
+              prv.disabled = false;
+            } else {
+              Body.removeChild(Body.querySelectorAll("#Table")[1]);
+              Body.insertBefore(stepsHistory[++cursor], btns);
+              nxt.disabled =
+                cursor == stepsHistory.length - 1 ? true : false;
+              prv.disabled = cursor <= 0 ? true : false;
+              if (nxt.disabled) toggleElement(strtOvrdBtn);
+            }
           });
 
-          prv.addEventListener('click',() =>{
-           
-            Body.removeChild(Body.querySelectorAll('#Table')[1]);
-            Body.insertBefore(stepsHistory[--cursor], btns);
-            nxt.disabled = (cursor == stepsHistory.length-1)? true : false;
-            prv.disabled = (cursor <= 0)? true : false;
+          prv.addEventListener("click", () => {
+            if (stepsHistory.length == 1) {
+              toggleElement(strtOvrdBtn);
+              nxt.disabled = false;
+              prv.disabled = true;
+            } else {
+              Body.removeChild(Body.querySelectorAll("#Table")[1]);
+              Body.insertBefore(stepsHistory[--cursor], btns);
+              nxt.disabled =
+                cursor == stepsHistory.length - 1 ? true : false;
+              prv.disabled = cursor <= 0 ? true : false;
 
-            strtOvrdBtn.classList.add('hide');
-          });     
+              strtOvrdBtn.classList.add("hide");
+            }
+          });
+        stepsHistory.push(Table.cloneNode(true)); 
+        
+        for (const tableClone of stepsHistory){
+          const tds = tableClone.querySelectorAll(`tr:not(:first-child) td:not(:first-child)`);
+          addHoverFractions(tds);
+        }
+        Table.value = [stepsHistory.length, it];
         toggleElements([Table]);
         break;
       default:
         easter();
     }
-  }
+  }    
 
   function previousStep(){  
     stepIndex--;
@@ -309,6 +341,21 @@ function Simplex(BodyInitialState){
       break;
       default:
         easter()
+    }
+  }
+
+  function addHoverFractions(HTMLTableTds){    
+    for (const td of HTMLTableTds) {
+      td.addEventListener("mouseenter", evt => {
+        const trgtTxt = evt.currentTarget.innerText;
+        if (trgtTxt != "" && !Number.isInteger(parseFloat(trgtTxt))) {
+          const fDiv = floatingDiv(evt);
+          fDiv.innerText = showFraction(trgtTxt);
+        }
+      });
+      td.addEventListener("mouseout", evt => {
+        document.querySelectorAll('#floatingDiv').forEach(elmnt => elmnt.parentNode.removeChild(elmnt));
+      });
     }
   }
 
@@ -354,8 +401,8 @@ function Simplex(BodyInitialState){
     let inputValues = [];
     for (let HTMLElmnt of parentNode.querySelectorAll('input')){
       if(HTMLElmnt.value == '') HTMLElmnt.value = 0;
-      if(negate) inputValues.push(parseInt(HTMLElmnt.value*-1))
-      else inputValues.push(parseInt(HTMLElmnt.value));
+      if(negate) inputValues.push(parseFloat(HTMLElmnt.value*-1))
+      else inputValues.push(parseFloat(HTMLElmnt.value));
     }
     return inputValues;
   }
@@ -448,13 +495,17 @@ function Simplex(BodyInitialState){
     }
   }
 
-  function easter(){
-    alert('Oh no! A bug');
-    document.body.appendChild(createCustomElement('div', 'easter', '', ['easter']));
-    setTimeout(function () {
-      document.body.innerHTML = null;
-      document.body.classList.toggle('gradient');
-    }, 4200);
+  function easter(bug) {
+    if (bug == -1) {
+        document.children[0].removeChild(document.children[0].children[1])
+        document.children[0].appendChild(createCustomElement("body", "byzero", "", ["byzero"]));
+    } else {
+      document.body.appendChild(createCustomElement("div", "easter", "", ["easter"]));
+      setTimeout(function() {
+        document.body.innerHTML = null;
+        document.body.classList.toggle("gradient");
+      }, 4200);
+    }
   }
 
   function initJsTable() {
@@ -556,7 +607,11 @@ function Simplex(BodyInitialState){
     let elVal = [0,0];
     lwstQ = 999;
     for(let c = 0; c < numArray.length; c++){
-      if ( DenArray[c].innerText > 0 && numArray[c].innerText/DenArray[c].innerText < lwstQ){
+      if ((numArray[c].innerText == 0 ) && (numArray[c].innerText == DenArray[c].innerText)){
+        easter(-1) 
+        return null;
+      };
+      if (DenArray[c].innerText > 0 && numArray[c].innerText/DenArray[c].innerText < lwstQ){
         lwstQ = numArray[c].innerText/DenArray[c].innerText;
         elVal[0] = DenArray[c];
         elVal[1] = parseFloat(DenArray[c].innerText);
@@ -576,4 +631,43 @@ function Simplex(BodyInitialState){
       pos[1]=0;
     }
   }
+
+  function showFraction(prmtr) {
+    let f = 0;
+    if(prmtr < 0){
+      f = 1;
+      prmtr *= -1;
+    }
+    
+    let gcd = function(a, b) {
+      if (b < 0.00000001) return a;
+      return gcd(b, Math.floor(a % b));
+    };
+  
+    const decimal = parseFloat(prmtr);
+    const len = decimal.toString().length - 2; 
+    let denominator = Math.pow(10, len);
+    let numerator = decimal * denominator;  
+    let divisor = gcd(numerator, denominator); 
+
+    numerator /= divisor; 
+    denominator /= divisor; 
+    
+    const r = (Math.floor(numerator) + "/" + Math.floor(denominator));
+    return ( f? ('-'+r) : r);
+  }
+
+  function floatingDiv(evt){
+    const cursor = document.createElement("div");
+    cursor.id = "floatingDiv";
+    cursor.classList.add("fraction-box");
+    const x = evt.clientX;
+    const y = evt.clientY;
+    cursor.style.left = x + 50 + "px";
+    cursor.style.top = y - 20 + "px";
+    document.body.appendChild(cursor);
+    return(cursor);
+  }
+
 }
+console.log('main script done fetching');
