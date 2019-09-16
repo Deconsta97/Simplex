@@ -47,18 +47,18 @@ td {
   padding: 0%;
   margin: 0%;
   border-spacing: unset;
-  border-width: 1.5px;
+  border-width: 0.1vw;
+}
+
+table#simTbl th,table#simTbl td{
+  width: 3.5vw;
+  height: 4vh;
 }
 
 table#simTbl th,
-td {
-  width: 64px;
-  height: 32px;
-}
-
-table#simTbl th {
-  width: 64px;
-  height: 32px;
+table#simTbl td,
+table#simTbl text{
+ font-size:1vw;
 }
 
 table#simTbl th,
@@ -448,6 +448,11 @@ margin: 0;
   line-height: 1.45vw;
 }
 
+.bttmCard {
+  /* background-color: green; */
+  line-height: 0.9vw;
+}
+
 .dCWrppr div {
   padding: 1%;
   margin: 1%;
@@ -476,4 +481,34 @@ margin: 0;
   /**/
   width: -webkit-fill-available;
   font-size: 1vw;
+}
+
+.TdCWrppr {
+  background-color: #ffffff;
+  border: 1px solid gray;
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  font-family: "Open Sans", sans-serif;
+  height: fit-content;
+  left: 0%;
+  margin: 0.5%;
+  padding: 0.5%;
+  position: fixed;
+  top: 51%;
+  width: 71vw;
+  text-align: justify;
+}
+
+.TdCWrppr h3 {
+  padding: 0%;
+  margin: 1% 1.5% 1% 1.5%;
+  font-size: 1.25vw;
+  white-space: nowrap;
+}
+
+.TdCWrppr text {
+  width: -webkit-fill-available;
+  font-size: 0.8vw;
 }
