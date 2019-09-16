@@ -11,6 +11,10 @@ body {
   margin: auto;
 }
 
+h2 {
+  font: 1.5vw "Open Sans", sans-serif;
+}
+
 .gradient {
   background-image: url(./resources/marineBgNoise.png);
 }
@@ -133,7 +137,7 @@ table#simTbl tr:last-child td:not(:first-child) {
   box-sizing: border-box;
   padding: 1%;
   margin: 1.5% 0% 1.5% 0%;
-  font: 1.5em "Open Sans", sans-serif;
+  font: 1.25vw "Open Sans", sans-serif;
 }
 
 .buttonWrppr {
@@ -192,8 +196,10 @@ select:focus {
 #objFnctn input,
 [id*="resRow"] input,
 #mdlOvrvw input {
-  width: 32px;
+  width: 2.5vw;
+  height: fit-content;
   text-align: end;
+  font-size: 1vw;
 }
 
 .defBtn {
@@ -221,7 +227,7 @@ select:focus {
 }
 
 .defMrgnL {
-  margin-left: 15px;
+  margin-left: 10px;
 }
 
 .defMrgnR {
@@ -265,7 +271,7 @@ select:focus {
 #mdlOvrvw text {
   white-space: nowrap;
   font-family: "Cambria Math";
-  font-size: 1em;
+  font-size: 1.2vw;
 }
 
 .varInsWrppr {
@@ -276,7 +282,7 @@ select:focus {
   margin: 5px;
   padding: 10px;
   white-space: nowrap;
-  font: 1.2em "Open Sans", sans-serif;
+  font: 1.5vw "Open Sans", sans-serif;
 }
 
 /*
@@ -304,7 +310,7 @@ margin: 0;
   justify-content: space-around;
   display: flex;
   flex-direction: row;
-  width: 100%;
+  width: 20vw;
   height: fit-content;
   box-sizing: border-box;
   padding: 1.5%;
@@ -318,10 +324,11 @@ margin: 0;
   color: black;
   border: unset;
   font-family: "Cambria Math";
-  font-size: 2em;
+  font-size: 1.75vw;
   text-align: center;
-  width: 40px;
+  width: 2.5vw;
   box-shadow: 0 1px 2px 0 #3c40434d, 0 1px 3px 1px #3c404326;
+  height: 5vh;
 }
 
 .varResBtn:hover {
@@ -377,7 +384,7 @@ margin: 0;
     padding: 0%;
     box-sizing: border-box;
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     align-items: center;
     justify-content: space-between;
     width: 90%;
@@ -392,16 +399,29 @@ margin: 0;
     white-space: nowrap;
     box-sizing: border-box;
     width: fit-content;
-    height: 7vh;
-    border-radius: 5px;
-    border: solid black 1.5px;
+    height: 10vh;
+    border-radius: 50px;
+    /* border: solid black 1.5px; */
     background: white;
     outline: unset;
-    padding: 0%;
+    padding: 0% 1% 0% 1%;
     margin: 1%;
     text-align: center;
-    font: bold 0.8em "Clear Sans";
+    font: bold 1.5vw "Open Sans", sans-serif;
   }
+
+#strtOvrBtn{
+  order:2;
+}
+
+
+#prvInnrStpBtn{
+  order:3;
+}
+  
+
+
+
 }
 
 .dCWrppr {
